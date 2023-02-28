@@ -58,8 +58,15 @@
     <Folder Include="Properties" />
     <Folder Include="dbo" />
     <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="dbo\Stored Procedures\AppointmentsTypes" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\AppointmentsTypes.sql" />
+    <Build Include="dbo\Stored Procedures\AppointmentsTypes\AppointmentsTypes_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\AppointmentsTypes\AppointmentsTypes_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\AppointmentsTypes\AppointmentsTypes_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\AppointmentsTypes\AppointmentsTypes_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\AppointmentsTypes\AppointmentsTypes_Update.sql" />
   </ItemGroup>
 </Project>
