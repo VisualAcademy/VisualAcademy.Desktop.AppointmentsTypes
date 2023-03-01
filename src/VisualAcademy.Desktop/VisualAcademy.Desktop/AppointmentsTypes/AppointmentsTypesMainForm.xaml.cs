@@ -20,5 +20,20 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
         public AppointmentsTypesMainForm() {
             InitializeComponent();
         }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e) {
+            var addWindow = new AddAppointmentTypeWindow();
+            addWindow.ShowDialog();
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e) {
+            var editWindow = new EditAppointmentTypeWindow();
+            editWindow.ShowDialog();
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+            MessageBox.Show("Are you sure you want to delete this appointment type?", 
+                "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        }
     }
 }
