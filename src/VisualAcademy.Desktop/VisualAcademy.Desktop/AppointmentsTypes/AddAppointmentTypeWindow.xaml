@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:VisualAcademy.Desktop.AppointmentsTypes"
         mc:Ignorable="d"
         Title="Add Appointment Type" Height="150" Width="300">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <TextBlock Text="Appointment Type Name" Margin="0 5 0 5" />
+        <TextBox Name="AppointmentTypeNameTextBox" Margin="0 0 0 10" />
+        <StackPanel Orientation="Horizontal">
+            <Button Content="OK" Width="100" Margin="5" Click="OkButton_Click" />
+            <Button Content="Cancel" Width="100" Margin="5" Click="CancelButton_Click" />
+        </StackPanel>
+    </StackPanel>
 </Window>

@@ -23,7 +23,9 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
 
         private void AddButton_Click(object sender, RoutedEventArgs e) {
             var addWindow = new AddAppointmentTypeWindow();
-            addWindow.ShowDialog();
+            if (addWindow.ShowDialog() == true) {
+                MessageBox.Show(addWindow.AppointmentTypeName);
+            }
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e) {
