@@ -20,5 +20,16 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
         public AddAppointmentTypeWindow() {
             InitializeComponent();
         }
+
+        public string AppointmentTypeName { get; private set; }
+
+        private void OkButton_Click(object sender, RoutedEventArgs e) {
+            AppointmentTypeName = AppointmentTypeNameTextBox.Text;
+            DialogResult = true; 
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e) {
+            DialogResult = false;
+        }
     }
 }
