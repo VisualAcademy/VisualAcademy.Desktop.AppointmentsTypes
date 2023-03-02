@@ -110,8 +110,26 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show("Are you sure you want to delete this appointment type?", 
-                "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var appointmentType = (AppointmentType)AppointmentTypesListView.SelectedItem;
+            if (appointmentType == null) {
+                return;
+            }
+
+            if (MessageBox.Show("Are you sure you want to delete this appointment type?",
+                "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes) 
+            {
+                using (var con = new SqlConnection(_connectionString)) {
+                    con.Open();
+
+                    var query = "DELETE FROM AppointmentsTypes WHERE Id=@Id";
+                    var cmd = new SqlCommand(query, con);
+
+                    cmd.Parameters.AddWithValue("@Id", appointmentType.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+                LoadData();
+            }
         }
 
         private void AppointmentTypesListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
