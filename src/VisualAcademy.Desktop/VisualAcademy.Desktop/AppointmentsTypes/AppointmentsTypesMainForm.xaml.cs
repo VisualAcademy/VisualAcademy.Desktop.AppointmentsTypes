@@ -82,13 +82,48 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e) {
-            var editWindow = new EditAppointmentTypeWindow("", false);
-            editWindow.ShowDialog();
+            var appointmentType = (AppointmentType)AppointmentTypesListView.SelectedItem;
+            if (appointmentType == null) {
+                return;
+            }
+
+            var editWindow = new EditAppointmentTypeWindow(
+                appointmentType.AppointmentTypeName, appointmentType.IsActive);
+            if (editWindow.ShowDialog() == true) 
+            {
+                using (var con = new SqlConnection(_connectionString)) {
+                    con.Open();
+
+                    var query = "UPDATE AppointmentsTypes " +
+                        "SET AppointmentTypeName=@AppointmentTypeName, IsActive=@IsActive " +
+                        "WHERE Id=@Id";
+                    var cmd = new SqlCommand(query, con);
+
+                    cmd.Parameters.AddWithValue("@Id", appointmentType.Id);
+                    cmd.Parameters.AddWithValue("@AppointmentTypeName", editWindow.AppointmentTypeName);
+                    cmd.Parameters.AddWithValue("@IsActive", editWindow.IsActive);
+
+                    cmd.ExecuteNonQuery();
+                }
+                LoadData();
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e) {
             MessageBox.Show("Are you sure you want to delete this appointment type?", 
                 "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        }
+
+        private void AppointmentTypesListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var appointmentType = (AppointmentType)AppointmentTypesListView.SelectedItem;
+            if (appointmentType == null) {
+                EditButton.IsEnabled = false;
+                DeleteButton.IsEnabled = false;
+            }
+            else {
+                EditButton.IsEnabled = true; 
+                DeleteButton.IsEnabled = true;
+            }
         }
     }
 }

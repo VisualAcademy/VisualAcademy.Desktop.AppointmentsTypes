@@ -11,8 +11,8 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
 
         public EditAppointmentTypeWindow(string appointmentTypeName, bool isActive) {
             InitializeComponent();
-            AppointmentTypeName = appointmentTypeName;
-            IsActive = isActive;
+            AppointmentTypeNameTextBox.Text = appointmentTypeName;
+            IsActiveCheckBox.IsChecked = isActive;
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e) {
