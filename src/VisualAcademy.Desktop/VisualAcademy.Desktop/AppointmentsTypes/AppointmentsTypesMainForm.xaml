@@ -22,7 +22,7 @@
                   SelectionChanged="AppointmentTypesListView_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"></GridViewColumn>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="100"></GridViewColumn>
                     <GridViewColumn Header="AppointmentTypeName" DisplayMemberBinding="{Binding AppointmentTypeName}"></GridViewColumn>
                     <GridViewColumn Header="IsActive" DisplayMemberBinding="{Binding IsActive}"></GridViewColumn>
                 </GridView>
