@@ -1,17 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using VisualAcademy.Desktop.Models;
 
 namespace VisualAcademy.Desktop.AppointmentsTypes {
@@ -22,7 +11,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
 
         private readonly List<AppointmentType> _appointmentsTypes;
 
-        private readonly string _connectionString = 
+        private readonly string _connectionString =
             "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AppointmentDatabase;Integrated Security=True";
 
         public AppointmentsTypesMainForm() {
@@ -48,8 +37,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
                         var name = (string)reader["AppointmentTypeName"];
                         var isActive = (bool)reader["IsActive"];
 
-                        var appointmentType = new AppointmentType 
-                        { 
+                        var appointmentType = new AppointmentType {
                             Id = id,
                             AppointmentTypeName = name,
                             IsActive = isActive
@@ -58,7 +46,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
                     }
                 }
             }
-            AppointmentTypesListView.Items.Refresh(); 
+            AppointmentTypesListView.Items.Refresh();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e) {
@@ -89,8 +77,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
 
             var editWindow = new EditAppointmentTypeWindow(
                 appointmentType.AppointmentTypeName, appointmentType.IsActive);
-            if (editWindow.ShowDialog() == true) 
-            {
+            if (editWindow.ShowDialog() == true) {
                 using (var con = new SqlConnection(_connectionString)) {
                     con.Open();
 
@@ -116,8 +103,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
             }
 
             if (MessageBox.Show("Are you sure you want to delete this appointment type?",
-                "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes) 
-            {
+                "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes) {
                 using (var con = new SqlConnection(_connectionString)) {
                     con.Open();
 
@@ -139,7 +125,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
                 DeleteButton.IsEnabled = false;
             }
             else {
-                EditButton.IsEnabled = true; 
+                EditButton.IsEnabled = true;
                 DeleteButton.IsEnabled = true;
             }
         }
