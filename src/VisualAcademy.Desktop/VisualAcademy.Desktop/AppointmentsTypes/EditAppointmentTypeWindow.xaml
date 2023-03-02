@@ -6,7 +6,15 @@
         xmlns:local="clr-namespace:VisualAcademy.Desktop.AppointmentsTypes"
         mc:Ignorable="d"
         Title="Edit Appointment Type" Height="200" Width="300">
-    <Grid>
-        
-    </Grid>
+    <StackPanel Margin="5">
+        <TextBlock Text="Appointment Type Name" Margin="0 5 0 5" />
+        <TextBox Name="AppointmentTypeNameTextBox" Margin="0 0 0 10" />
+        <StackPanel Orientation="Horizontal">
+            <CheckBox Name="IsActiveCheckBox" Margin="0 0 10 0" Content="Active"></CheckBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="OK" Width="100" Margin="5" Click="OkButton_Click" />
+            <Button Content="Cancel" Width="100" Margin="5" Click="CancelButton_Click" />
+        </StackPanel>
+    </StackPanel>
 </Window>

@@ -29,7 +29,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e) {
-            var editWindow = new EditAppointmentTypeWindow();
+            var editWindow = new EditAppointmentTypeWindow("", false);
             editWindow.ShowDialog();
         }
 
