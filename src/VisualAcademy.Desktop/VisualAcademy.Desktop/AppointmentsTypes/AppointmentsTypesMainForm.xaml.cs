@@ -64,7 +64,20 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
         private void AddButton_Click(object sender, RoutedEventArgs e) {
             var addWindow = new AddAppointmentTypeWindow();
             if (addWindow.ShowDialog() == true) {
-                MessageBox.Show(addWindow.AppointmentTypeName);
+                using (var con = new SqlConnection(_connectionString)) {
+                    con.Open();
+
+                    var query = "INSERT INTO AppointmentsTypes (AppointmentTypeName, IsActive, DateCreated) " +
+                        "VALUES (@AppointmentTypeName, @IsActive, @DateCreated)";
+                    var cmd = new SqlCommand(query, con);
+
+                    cmd.Parameters.AddWithValue("@AppointmentTypeName", addWindow.AppointmentTypeName);
+                    cmd.Parameters.AddWithValue("@IsActive", true);
+                    cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now);
+
+                    cmd.ExecuteNonQuery();
+                }
+                LoadData();
             }
         }
 
