@@ -14,11 +14,12 @@
 
         <StackPanel Orientation="Horizontal" Margin="5">
             <Button Name="AddButton" Content="Add" Width="100" Margin="5" Click="AddButton_Click"></Button>
-            <Button Name="EditButton" Content="Edit" Width="100" Margin="5" Click="EditButton_Click"></Button>
-            <Button Name="DeleteButton" Content="Delete" Width="100" Margin="5" Click="DeleteButton_Click"></Button>
+            <Button Name="EditButton" Content="Edit" Width="100" Margin="5" Click="EditButton_Click" IsEnabled="False"></Button>
+            <Button Name="DeleteButton" Content="Delete" Width="100" Margin="5" Click="DeleteButton_Click" IsEnabled="False"></Button>
         </StackPanel>
 
-        <ListView Grid.Row="1" Name="AppointmentTypesListView" Margin="5">
+        <ListView Grid.Row="1" Name="AppointmentTypesListView" Margin="5"
+                  SelectionChanged="AppointmentTypesListView_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"></GridViewColumn>
