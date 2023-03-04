@@ -1,4 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
+using System;
+using System.Data;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using VisualAcademy.Desktop.Models;
@@ -19,7 +22,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
 
             _appointmentsTypes = new List<AppointmentType>();
             AppointmentTypesListView.ItemsSource = _appointmentsTypes;
-            LoadData();
+            LoadDataSp();
         }
 
         private void LoadData() {
@@ -48,22 +51,56 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
             }
             AppointmentTypesListView.Items.Refresh();
         }
+        private void LoadDataSp() {
+            _appointmentsTypes.Clear();
+
+            // ADO.NET을 사용하여 데이터 조회
+            using (var connection = new SqlConnection(_connectionString)) {
+                connection.Open();
+
+                var command = new SqlCommand("AppointmentsTypes_GetAll", connection);
+
+                using (var da = new SqlDataAdapter(command)) {
+                    var dt = new DataTable();
+                    da.Fill(dt);
+                    //AppointmentTypesListView.ItemsSource = dt.DefaultView; 
+                    //AppointmentTypesListView.ItemsSource = DataTableToList<AppointmentType>(dt); // List<T>
+                    _appointmentsTypes.AddRange(DataTableToList<AppointmentType>(dt));
+                }
+            }
+            AppointmentTypesListView.Items.Refresh();
+        }
 
         private void AddButton_Click(object sender, RoutedEventArgs e) {
             var addWindow = new AddAppointmentTypeWindow();
             if (addWindow.ShowDialog() == true) {
                 using (var con = new SqlConnection(_connectionString)) {
-                    con.Open();
 
-                    var query = "INSERT INTO AppointmentsTypes (AppointmentTypeName, IsActive, DateCreated) " +
-                        "VALUES (@AppointmentTypeName, @IsActive, @DateCreated)";
-                    var cmd = new SqlCommand(query, con);
+                    if (DateTime.Now.Second % 2 == 0) {
+                        var query = "INSERT INTO AppointmentsTypes (AppointmentTypeName, IsActive, DateCreated) " +
+                    "VALUES (@AppointmentTypeName, @IsActive, @DateCreated)";
+                        var cmd = new SqlCommand(query, con);
 
-                    cmd.Parameters.AddWithValue("@AppointmentTypeName", addWindow.AppointmentTypeName);
-                    cmd.Parameters.AddWithValue("@IsActive", true);
-                    cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now);
+                        cmd.Parameters.AddWithValue("@AppointmentTypeName", addWindow.AppointmentTypeName);
+                        cmd.Parameters.AddWithValue("@IsActive", true);
+                        cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now); 
+                        
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    else {
+                        var query = "AppointmentsTypes_Insert";
+                        var cmd = new SqlCommand(query, con);
+                        cmd.CommandType = CommandType.StoredProcedure; // SP
 
-                    cmd.ExecuteNonQuery();
+                        cmd.Parameters.AddWithValue("@AppointmentTypeName", addWindow.AppointmentTypeName);
+                        //cmd.Parameters.AddWithValue("@IsActive", true);
+                        //cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now);
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
                 }
                 LoadData();
             }
@@ -79,18 +116,33 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
                 appointmentType.AppointmentTypeName, appointmentType.IsActive);
             if (editWindow.ShowDialog() == true) {
                 using (var con = new SqlConnection(_connectionString)) {
-                    con.Open();
+                    if (DateTime.Now.Second % 2 == 1) {
+                        con.Open();
 
-                    var query = "UPDATE AppointmentsTypes " +
-                        "SET AppointmentTypeName=@AppointmentTypeName, IsActive=@IsActive " +
-                        "WHERE Id=@Id";
-                    var cmd = new SqlCommand(query, con);
+                        var query = "UPDATE AppointmentsTypes " +
+                            "SET AppointmentTypeName=@AppointmentTypeName, IsActive=@IsActive " +
+                            "WHERE Id=@Id";
+                        var cmd = new SqlCommand(query, con);
 
-                    cmd.Parameters.AddWithValue("@Id", appointmentType.Id);
-                    cmd.Parameters.AddWithValue("@AppointmentTypeName", editWindow.AppointmentTypeName);
-                    cmd.Parameters.AddWithValue("@IsActive", editWindow.IsActive);
+                        cmd.Parameters.AddWithValue("@Id", appointmentType.Id);
+                        cmd.Parameters.AddWithValue("@AppointmentTypeName", editWindow.AppointmentTypeName);
+                        cmd.Parameters.AddWithValue("@IsActive", editWindow.IsActive);
 
-                    cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery(); 
+                    }
+                    else {
+                        con.Open();
+
+                        var query = "AppointmentsTypes_Update";
+                        var cmd = new SqlCommand(query, con);
+                        cmd.CommandType = CommandType.StoredProcedure; 
+
+                        cmd.Parameters.AddWithValue("@Id", appointmentType.Id);
+                        cmd.Parameters.AddWithValue("@AppointmentTypeName", editWindow.AppointmentTypeName);
+                        //cmd.Parameters.AddWithValue("@IsActive", editWindow.IsActive);
+
+                        cmd.ExecuteNonQuery();
+                    }
                 }
                 LoadData();
             }
@@ -105,14 +157,29 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
             if (MessageBox.Show("Are you sure you want to delete this appointment type?",
                 "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes) {
                 using (var con = new SqlConnection(_connectionString)) {
-                    con.Open();
+                    if (DateTime.Now.Second == 0) {
+                        // 인라인 SQL: Ad Hoc 쿼리 
+                        con.Open();
 
-                    var query = "DELETE FROM AppointmentsTypes WHERE Id=@Id";
-                    var cmd = new SqlCommand(query, con);
+                        var query = "DELETE FROM AppointmentsTypes WHERE Id=@Id";
+                        var cmd = new SqlCommand(query, con);
 
-                    cmd.Parameters.AddWithValue("@Id", appointmentType.Id);
+                        cmd.Parameters.AddWithValue("@Id", appointmentType.Id);
 
-                    cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery(); 
+                    }
+                    else {
+                        // 저장 프로시저
+                        con.Open();
+
+                        var query = "AppointmentsTypes_Delete";
+                        var cmd = new SqlCommand(query, con);
+                        cmd.CommandType= CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@Id", appointmentType.Id);
+
+                        cmd.ExecuteNonQuery();
+                    }
                 }
                 LoadData();
             }
@@ -128,6 +195,26 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
                 EditButton.IsEnabled = true;
                 DeleteButton.IsEnabled = true;
             }
+        }
+
+        public static List<T> DataTableToList<T>(DataTable table) where T : new() {
+            List<T> list = new List<T>();
+
+            foreach (DataRow row in table.Rows) {
+                T obj = new T();
+
+                foreach (DataColumn column in table.Columns) {
+                    PropertyInfo prop = obj.GetType().GetProperty(column.ColumnName);
+
+                    if (prop != null && row[column] != DBNull.Value) {
+                        prop.SetValue(obj, row[column], null);
+                    }
+                }
+
+                list.Add(obj);
+            }
+
+            return list;
         }
     }
 }
