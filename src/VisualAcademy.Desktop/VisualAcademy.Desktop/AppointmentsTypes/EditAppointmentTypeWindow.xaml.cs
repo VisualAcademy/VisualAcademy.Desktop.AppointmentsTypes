@@ -21,8 +21,6 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
             DialogResult = true;
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e) {
-            DialogResult = false;
-        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e) => DialogResult = false;
     }
 }
