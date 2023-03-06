@@ -16,7 +16,5 @@ public partial class AddAppointmentTypeWindow : Window {
         DialogResult = true;
     }
 
-    private void CancelButton_Click(object sender, RoutedEventArgs e) {
-        DialogResult = false;
-    }
+    private void CancelButton_Click(object sender, RoutedEventArgs e) => DialogResult = false;
 }
