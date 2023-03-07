@@ -117,6 +117,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
             if (editWindow.ShowDialog() == true) {
                 using (var con = new SqlConnection(_connectionString)) {
                     if (DateTime.Now.Second % 2 == 1) {
+                        // 인라인 SQL 사용 방식
                         con.Open();
 
                         var query = "UPDATE AppointmentsTypes " +
@@ -131,6 +132,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
                         cmd.ExecuteNonQuery(); 
                     }
                     else {
+                        // 저장 프로시저 사용 방식 
                         con.Open();
 
                         var query = "AppointmentsTypes_Update";
