@@ -199,6 +199,13 @@ namespace VisualAcademy.Desktop.AppointmentsTypes {
             }
         }
 
+        /// <summary>
+        /// DataTable 형식을 List<typeparamref name="T"/> 형식으로 변경시켜주는 헬퍼 펑션 
+        /// https://www.memoengine.com/blog/c%EC%97%90%EC%84%9C-datatable%EC%9D%84-listt-%ED%98%95%ED%83%9C%EB%A1%9C-%EB%B3%80%ED%99%98%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95/
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="table"></param>
+        /// <returns></returns>
         public static List<T> DataTableToList<T>(DataTable table) where T : new() {
             List<T> list = new List<T>();
 
