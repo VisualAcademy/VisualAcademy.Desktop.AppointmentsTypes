@@ -4,6 +4,7 @@
 AS
 BEGIN
   UPDATE AppointmentsTypes
-  SET AppointmentTypeName = @AppointmentTypeName
+  SET 
+    AppointmentTypeName = @AppointmentTypeName
   WHERE Id = @Id;
 END
