@@ -76,8 +76,8 @@ public partial class AppointmentsTypesMainForm : Window {
         var addWindow = new AddAppointmentTypeWindow();
         if (addWindow.ShowDialog() == true) {
             using (var con = new SqlConnection(_connectionString)) {
-
                 if (DateTime.Now.Second % 2 == 0) {
+                    // 학습 목적으로 ADO.NET 사용 
                     var query = "INSERT INTO AppointmentsTypes (AppointmentTypeName, IsActive, DateCreated) " +
                 "VALUES (@AppointmentTypeName, @IsActive, @DateCreated)";
                     var cmd = new SqlCommand(query, con);
@@ -90,6 +90,7 @@ public partial class AppointmentsTypesMainForm : Window {
                     cmd.ExecuteNonQuery();
                 }
                 else {
+                    // 학습 목적으로 저장 프로시저 사용
                     var query = "AppointmentsTypes_Insert";
                     var cmd = new SqlCommand(query, con);
                     cmd.CommandType = CommandType.StoredProcedure; // SP
