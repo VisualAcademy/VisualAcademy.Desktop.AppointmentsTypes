@@ -8,7 +8,7 @@ namespace VisualAcademy.Desktop.AppointmentsTypes;
 public partial class EditAppointmentTypeWindow : Window
 {
     // 약속 유형의 이름을 저장하는 속성
-    public string AppointmentTypeName { get; private set; }
+    public string AppointmentTypeName { get; private set; } = null!;
     // 약속 유형의 활성화 상태를 저장하는 속성
     public new bool IsActive { get; private set; }
 
