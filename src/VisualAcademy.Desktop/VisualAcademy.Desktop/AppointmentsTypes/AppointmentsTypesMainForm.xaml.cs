@@ -208,16 +208,21 @@ public partial class AppointmentsTypesMainForm : Window {
     /// <typeparam name="T"></typeparam>
     /// <param name="table"></param>
     /// <returns></returns>
-    public static List<T> DataTableToList<T>(DataTable table) where T : new() {
+    public static List<T> DataTableToList<T>(DataTable table) where T : new()
+    {
         List<T> list = new List<T>();
 
-        foreach (DataRow row in table.Rows) {
+        foreach (DataRow row in table.Rows)
+        {
             T obj = new T();
 
-            foreach (DataColumn column in table.Columns) {
-                PropertyInfo prop = obj.GetType().GetProperty(column.ColumnName);
+            foreach (DataColumn column in table.Columns)
+            {
+                PropertyInfo? prop = obj.GetType().GetProperty(column.ColumnName); // 'prop' can be null.
 
-                if (prop != null && row[column] != DBNull.Value) {
+                // Check if 'prop' is not null and row[column] is not DBNull.Value before setting the value.
+                if (prop != null && row[column] != DBNull.Value)
+                {
                     prop.SetValue(obj, row[column], null);
                 }
             }
