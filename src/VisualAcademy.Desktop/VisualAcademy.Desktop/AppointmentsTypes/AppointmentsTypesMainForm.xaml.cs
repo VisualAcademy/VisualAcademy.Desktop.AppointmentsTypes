@@ -26,22 +26,28 @@ public partial class AppointmentsTypesMainForm : Window {
         LoadDataSp();
     }
 
-    private void LoadData() {
+    #region LoadData: 인라인 SQL 사용(다른 말로 Ad hoc 쿼리 사용)
+    private void LoadData()
+    {
         _appointmentsTypes.Clear();
 
         // ADO.NET을 사용하여 데이터 조회
-        using (var connection = new SqlConnection(_connectionString)) {
+        using (var connection = new SqlConnection(_connectionString))
+        {
             connection.Open();
 
             var command = new SqlCommand("SELECT Id, AppointmentTypeName, IsActive FROM AppointmentsTypes", connection);
 
-            using (var reader = command.ExecuteReader()) {
-                while (reader.Read()) {
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
                     var id = (int)reader["Id"];
                     var name = (string)reader["AppointmentTypeName"];
                     var isActive = (bool)reader["IsActive"];
 
-                    var appointmentType = new AppointmentType {
+                    var appointmentType = new AppointmentType
+                    {
                         Id = id,
                         AppointmentTypeName = name,
                         IsActive = isActive
@@ -51,7 +57,9 @@ public partial class AppointmentsTypesMainForm : Window {
             }
         }
         AppointmentTypesListView.Items.Refresh();
-    }
+    } 
+    #endregion
+
     private void LoadDataSp() {
         _appointmentsTypes.Clear();
 
